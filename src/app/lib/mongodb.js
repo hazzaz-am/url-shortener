@@ -15,7 +15,10 @@ if (!process.env.MONGODB_URI) {
 if (process.env.NODE_ENV === "development") {
 	if (!global._mongoClientPromise) {
 		client = new MongoClient(uri, options);
-		global._mongoClientPromise = client.connect();
+		global._mongoClientPromise = client.connect().then((client) => {
+			console.log("✅ Connected to MongoDB:", uri);
+			return client;
+		});
 	}
 	clientPromise = global._mongoClientPromise;
 } else {
